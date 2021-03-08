@@ -1,0 +1,12 @@
+version: 0.2
+phases:
+  build:
+    commands:
+      - yarn install
+      - cd android && ./gradlew assembleDebug  --stacktrace
+      # - ls -d android/app/build/outputs/*
+      # - cd android && ./gradlew assembleRelease -x bundleReleaseJsAndAssets --stacktrace
+artifacts:
+  files:
+    - './android/app/build/outputs/**/*.apk'
+  discard-paths: yes
