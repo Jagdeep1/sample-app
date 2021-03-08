@@ -93,6 +93,7 @@ const styles = StyleSheet.create({
 
 class Article extends Component {
   scrollX = new Animated.Value(0);
+  state = { available: 0 };
 
   static navigationOptions = ({ navigation }) => {
     return {
@@ -152,6 +153,17 @@ class Article extends Component {
     )
   }
 
+  async componentDidMount() {
+    const { navigation } = this.props;
+    const article = navigation.getParam("article");
+    const { id } = article;
+
+    const status = await getDestinationStatus(id);
+
+    const { available } = status.data;
+    this.setState({ ...this.state, available });
+  }
+
   render() {
     const { navigation } = this.props;
     const article = navigation.getParam('article');
@@ -198,6 +210,12 @@ class Article extends Component {
                  ({article.reviews} reviews)
               </Text>
             </View>
+            <Text style={{ color: theme.colors.active }}>
+              Status:{" "}
+              {this.state.available
+                ? "Available"
+                : "Not available, come back later."}
+            </Text>
             <TouchableOpacity>
               <Text style={styles.description}>
                 {article.description.split('').slice(0, 180)}...
